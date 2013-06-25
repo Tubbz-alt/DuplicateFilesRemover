@@ -123,6 +123,70 @@ public class App {
 			}
 	}
 	
+	public static void modifyVBPFileByFolder(String vbpPath,
+	    String shareFolderPath) throws IOException {
+
+		File dir = new File(shareFolderPath);
+		if (!dir.isDirectory()) {
+			throw new IOException("Share folder path should be a directory!");
+		}
+		File[] dataFiles = dir.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return ((name.toLowerCase().endsWith(".frm")
+				    || name.toLowerCase().endsWith(".frx")
+				    || name.toLowerCase().endsWith(".cls") || name.toLowerCase()
+				    .endsWith(".bas")));
+			}
+		});
+		List<String> fileList = new ArrayList<>();
+
+		for (File file : dataFiles) {
+			fileList.add(file.getName());
+		}
+		
+		BufferedReader vbpBr = null;
+		BufferedWriter vbpBw = null;
+		// get all the deleted file names from this text file
+		// because the file name is not sensitive, we have to first get the subString.
+		// and then we can replace it.
+			try{
+				String sCurrentLine2;
+				vbpBr = new BufferedReader(new FileReader(vbpPath));
+				vbpBw = new BufferedWriter(new FileWriter("C:\\MapApps\\Apps\\CHEMMAP69\\Chemmapv6.vbpp"));
+				while((sCurrentLine2 = vbpBr.readLine()) != null){
+					
+					for(String fileName: fileList){
+						if(sCurrentLine2.toLowerCase().contains(" "+ fileName.toLowerCase())
+								|| sCurrentLine2.toLowerCase().contains("="+ fileName.toLowerCase())){
+							int startIdx = sCurrentLine2.toLowerCase().indexOf(fileName.toLowerCase());
+							int length = fileName.length();
+							String subStr = sCurrentLine2.substring(startIdx, startIdx + length);
+							
+							sCurrentLine2 = sCurrentLine2.replace(subStr, PARENT_FOLDER + fileName);
+						}
+					}
+					vbpBw.write(sCurrentLine2 + "\n");
+				}
+				System.out.println(fileList.size());
+			}catch (IOException e){
+				throw e;
+			} finally {
+				try {
+					if (vbpBr != null)
+						vbpBr.close();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+				try {
+					if (vbpBw != null)
+						vbpBw.close();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+	}
+	
 	public static void main(String[] args){
 		String path = "C:\\projects\\Oilmap\\ASAShared";
 		String path2 = "C:\\MapApps\\Apps\\CHEMMAP69";
@@ -131,10 +195,10 @@ public class App {
 				
 		
 		try {
-	    List<String> fileList = getFileListLCase(path);
-	    deleteDuplicateFile(path2, fileList);
-	    modifyVBPFile(vbpPath, txtPath);
-	    
+	    //List<String> fileList = getFileListLCase(path);
+	    //deleteDuplicateFile(path2, fileList);
+	    //modifyVBPFile(vbpPath, txtPath);
+	    modifyVBPFileByFolder(vbpPath, path);
     } catch (Exception e) {
 	    e.printStackTrace();
     }
