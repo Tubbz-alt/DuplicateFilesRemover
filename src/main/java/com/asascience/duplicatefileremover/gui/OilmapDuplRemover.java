@@ -11,7 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class App {
+public class OilmapDuplRemover {
+	
+	private static final String FILE_EXT_FRM = ".frm";
+	private static final String FILE_EXT_FRX = ".frx";
+	private static final String FILE_EXT_CLS = ".cls";
+	private static final String FILE_EXT_BAS = ".bas";
 	
 	private static final String PARENT_FOLDER = "ASAShared\\";
 	
@@ -20,13 +25,15 @@ public class App {
 		if(!dir.isDirectory()){
 			throw new Exception("Source path should be a directory!");
 		}
+		
+		// get list of file with certain extension name
 		File[] dataFiles = dir.listFiles(new FilenameFilter() {
 	  	@Override
 	    public boolean accept(File dir, String name) {
-	          return ((name.toLowerCase().endsWith(".frm") ||   
-	              name.toLowerCase().endsWith(".frx") ||  
-	              name.toLowerCase().endsWith(".cls") ||  
-	              name.toLowerCase().endsWith(".bas")));
+	          return ((name.toLowerCase().endsWith(FILE_EXT_FRM) ||   
+	              name.toLowerCase().endsWith(FILE_EXT_FRX) ||  
+	              name.toLowerCase().endsWith(FILE_EXT_CLS) ||  
+	              name.toLowerCase().endsWith(FILE_EXT_BAS)));
 	      }
 	  });
 		List<String> fileList = new ArrayList<>();
@@ -45,10 +52,10 @@ public class App {
 		File[] dataFiles = dir.listFiles(new FilenameFilter() {
 	  	@Override
 	    public boolean accept(File dir, String name) {
-	          return ((name.toLowerCase().endsWith(".frm") ||   
-	              name.toLowerCase().endsWith(".frx") ||  
-	              name.toLowerCase().endsWith(".cls") ||  
-	              name.toLowerCase().endsWith(".bas")));
+	          return ((name.toLowerCase().endsWith(FILE_EXT_FRM) ||   
+	              name.toLowerCase().endsWith(FILE_EXT_FRX) ||  
+	              name.toLowerCase().endsWith(FILE_EXT_CLS) ||  
+	              name.toLowerCase().endsWith(FILE_EXT_BAS)));
 	      }
 	  });
 		
